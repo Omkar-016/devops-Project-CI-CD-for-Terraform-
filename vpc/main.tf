@@ -22,7 +22,7 @@ resource "aws_subnet" "public_sub" {
 }
 
 resource "aws_security_group" "sec_local" {
-    vpc_id = aws_vpc.local_vpc
+    vpc_id = aws_vpc.local_vpc.id
     name = "sec_local"
     description = "Security group for my test vpc "
 
@@ -40,4 +40,22 @@ resource "aws_security_group" "sec_local" {
         cidr_blocks = ["0.0.0.0/0"]
     }
   
+}
+resource "aws_internet_gateway" "loc_gt_pb"{
+    vpc_id = aws_vpc.local_vpc.id
+
+}
+
+resource "aws_route_table" "public_rt_table"{
+    vpc_id = aws_vpc.local_vpc.id
+}
+
+resource "aws_route" "interent_gt"{
+     route_table_id = aws_route_table.public_rt_table.id
+     gateway_id = aws_internet_gateway.loc_gt_pb.id
+}
+
+resource "aws_route_table_association" "pb_sb_assoc"{
+    subnet_id = aws_subnet.public.sub.id
+    route_table_id = aws_route_table.public_rt_table.id
 }
