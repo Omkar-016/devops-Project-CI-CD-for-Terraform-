@@ -53,9 +53,10 @@ resource "aws_route_table" "public_rt_table"{
 resource "aws_route" "interent_gt"{
      route_table_id = aws_route_table.public_rt_table.id
      gateway_id = aws_internet_gateway.loc_gt_pb.id
+     destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "pb_sb_assoc"{
-    subnet_id = aws_subnet.public.sub.id
+    subnet_id = aws_subnet.public_sub.id
     route_table_id = aws_route_table.public_rt_table.id
 }
